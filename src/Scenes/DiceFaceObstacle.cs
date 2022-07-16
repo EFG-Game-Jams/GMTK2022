@@ -1,5 +1,5 @@
 using Godot;
-using System;
+using System.Linq;
 
 public class DiceFaceObstacle : Spatial
 {
@@ -17,6 +17,14 @@ public class DiceFaceObstacle : Spatial
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        var faceArea = GetNode("Face/Area");
+        faceArea.SetMeta(MetaNames.ColliderTag, ColliderTag.DieFace);
+
+        foreach (var node in GetChildren().Cast<Node>().Where(c => c.Name.StartsWith("BlackBall")))
+        {
+            node.GetNode("Area").SetMeta(MetaNames.ColliderTag, ColliderTag.Hole);
+        }
+
         var newTransform = Transform;
         newTransform.origin = SpawnLocation;
         Transform = newTransform;

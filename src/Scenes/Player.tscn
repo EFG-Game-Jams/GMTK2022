@@ -24,3 +24,5 @@ shape = SubResource( 1 )
 material_override = SubResource( 3 )
 mesh = SubResource( 4 )
 material/0 = null
+
+[connection signal="area_entered" from="Area" to="." method="OnCollisionEntered"]

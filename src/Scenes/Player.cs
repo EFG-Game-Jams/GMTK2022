@@ -174,6 +174,11 @@ public class Player : Spatial
         base._PhysicsProcess(delta);
     }
 
+    public void OnCollisionEntered(Area other)
+    {
+        var tag = (ColliderTag)other.GetMeta(MetaNames.ColliderTag);
+        GD.Print(tag);
+    }
 
     enum Lane
     {
