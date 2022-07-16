@@ -32,6 +32,7 @@ far = 1000.0
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
 jumpSpeed = 35.0
 glideSpeed = -5.0
+laneSwitchingSpeed = 10.0
 
 [node name="PlayerLight" type="OmniLight" parent="Player"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.508024, 4.38895 )

@@ -16,6 +16,8 @@ public class Player : Spatial
     [Export]
     private float laneXOffset = 3.2f;
     [Export]
+    private float laneSwitchingSpeed = 4f;
+    [Export]
     private float radius = 1f;
 
     private float currentJumpVelocity = 0;
@@ -107,14 +109,6 @@ public class Player : Spatial
 
     private void SwitchToLane(Lane lane)
     {
-        float x = lane == Lane.Left ? -laneXOffset : (lane == Lane.Right ? laneXOffset : 0f);
-        var newTransform = Transform;
-        newTransform.origin = new Vector3(
-            originalTransform.origin.x + x,
-            Transform.origin.y,
-            Transform.origin.z);
-        Transform = newTransform;
-
         currentLane = lane;
     }
 
@@ -140,6 +134,17 @@ public class Player : Spatial
                 Displace(delta * currentJumpVelocity);
             }
         }
+
+        float xOffset = currentLane == Lane.Left ? -laneXOffset : (currentLane == Lane.Right ? laneXOffset : 0f);
+        var updatedOrigin = Transform.origin.LinearInterpolate(
+            new Vector3(
+                originalTransform.origin.x + xOffset,
+                Transform.origin.y,
+                Transform.origin.z),
+            laneSwitchingSpeed * delta);
+        var newTransform = Transform;
+        newTransform.origin = updatedOrigin;
+        Transform = newTransform;
     }
 
     private void OnGroundCollision()
