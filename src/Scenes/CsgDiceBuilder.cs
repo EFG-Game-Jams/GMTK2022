@@ -14,9 +14,6 @@ public class CsgDiceBuilder : Spatial
     [Export] private int dieVariant = 0;
     public int DieVariant { get => dieVariant; set => dieVariant = value; }
 
-    [Export] public float MovementSpeed { get; set; } = 100f;
-    [Export] public float DespawnZThreshold = 10f;
-
     public bool IsNeutralized = false;
 
     // Called when the node enters the scene tree for the first time.
@@ -73,13 +70,6 @@ public class CsgDiceBuilder : Spatial
 
     private void ProcessForGame(float delta)
     {
-        // Update movement
-        Displace(MovementSpeed * delta);
-
-        if (Transform.origin.z > DespawnZThreshold)
-        {
-            QueueFree();
-        }
     }
 
     private void RebuildDie(Node root, int die)
@@ -166,15 +156,5 @@ public class CsgDiceBuilder : Spatial
                 break;
         }
         return pos;
-    }
-
-    private void Displace(float z)
-    {
-        var newTransform = Transform;
-        newTransform.origin = new Vector3(
-            Transform.origin.x,
-            Transform.origin.y,
-            Transform.origin.z + z);
-        Transform = newTransform;
     }
 }

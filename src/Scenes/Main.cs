@@ -1,78 +1,82 @@
 using Godot;
-using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public class Main : Spatial
 {
+    [Export] private float MinimumLeadDistance = 100f;
+    [Export] private float MaximumLeadDistance = 200f;
+    [Export] private float MinimumGapDistance = 10f;
+    [Export] private float MaximumGapDistance = 20f;
+    [Export] private float MinimumSegmentsLength = 800f;
+    private float movementSpeed = 80f;
     [Export]
-    private float MinimumSpawnTime = 2f;
-    [Export]
-    private float MaximumSpawnTime = 5f;
-    [Export]
-    private float ObstacleMovementSpeed = 100f;
-    [Export]
-    private float ObstacleDespawnZ = 10f;
+    private float MovementSpeed
+    {
+        get => movementSpeed;
+        set
+        {
+            movementSpeed = value;
+            foreach (var segment in segments)
+            {
+                segment.MovementSpeed = movementSpeed;
+            }
+        }
+    }
 
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
-    private PackedScene obstacleScene = (PackedScene)GD.Load("res://Scenes/ProceduralDice.tscn");
-    private PackedScene rampScene = (PackedScene)GD.Load("res://Scenes/Ramp.tscn");
+    private PackedScene worldSegmentScene = (PackedScene)GD.Load("res://Scenes/WorldSegment.tscn");
+    private List<WorldSegment> segments = new List<WorldSegment>();
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         GD.Randomize();
-
-        SetRandomSpawnObstacleTime();
+        AddSegment();
     }
 
-    public void OnObstacleSpawnTimerTimeout()
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(float delta)
     {
-        SpawnObstacleAndRamp();
-        SetRandomSpawnObstacleTime();
+        CleanupOldSegments();
+        EnsureSegmentsExist();
+
+        // TODO increment movement speed over time?
     }
 
-    private void SpawnObstacleAndRamp()
+    private void CleanupOldSegments()
     {
-        var spawnLocation = GetNode<ObstacleSpawnLocation>("ObstacleSpawnLocation");
-
-        var obstacle = obstacleScene.Instance<CsgDiceBuilder>();
-        var obstacleTransform = obstacle.Transform;
-        obstacleTransform.origin = spawnLocation.Transform.origin;
-        obstacle.Transform = obstacleTransform;
-        obstacle.DieVariant = (int)(GD.Randi() % 6) + 1;
-        obstacle.MovementSpeed = ObstacleMovementSpeed;
-        obstacle.DespawnZThreshold = ObstacleDespawnZ;
-        AddChild(obstacle);
-
-        var ramp = rampScene.Instance<Ramp>();
-        var rampTransform = ramp.Transform;
-        rampTransform.origin = new Vector3(
-            spawnLocation.Transform.origin.x,
-            0,
-            spawnLocation.Transform.origin.z + spawnLocation.RampLead);
-        ramp.Transform = rampTransform;
-        ramp.MovementSpeed = ObstacleMovementSpeed;
-        ramp.DespawnZThreshold = ObstacleDespawnZ;
-        AddChild(ramp);
+        while (segments.Count > 0 && segments.First().GetTailPosition().z > 100)
+        {
+            segments[0].QueueFree();
+            segments.RemoveAt(0);
+        }
     }
 
-    private void SetRandomSpawnObstacleTime()
+    private void EnsureSegmentsExist()
     {
-        var timer = GetNode<Timer>("ObstacleSpawnTimer");
-        timer.Start(GetRandomWaitTime());
+        while (segments.Count < 1 || Mathf.Abs(segments.Last().GetTailPosition().z) < MinimumSegmentsLength)
+        {
+            AddSegment();
+        }
     }
 
-    //
-    private float GetRandomWaitTime()
+    private void AddSegment()
     {
-        var range = MaximumSpawnTime - MinimumSpawnTime;
-        return MinimumSpawnTime + (GD.Randf() * range);
-    }
+        var segment = worldSegmentScene.Instance<WorldSegment>();
+        if (segments.Count < 1)
+        {
+            segment.SpawnPosition = new Vector3(0, 0, 10f);
+        }
+        else
+        {
+            segment.SpawnPosition = segments.Last().GetTailPosition();
+        }
+        // TODO fill the other variables with procedurally harder values
+        segment.LeadDistance = MinimumLeadDistance + (GD.Randf() * (MaximumLeadDistance - MinimumLeadDistance));
+        segment.GapDistance = MinimumGapDistance + (GD.Randf() * (MaximumGapDistance - MinimumGapDistance));
+        segment.MovementSpeed = MovementSpeed;
 
-    //  // Called every frame. 'delta' is the elapsed time since the previous frame.
-    //  public override void _Process(float delta)
-    //  {
-    //      
-    //  }
+        segments.Add(segment);
+        AddChild(segment);
+    }
 }
