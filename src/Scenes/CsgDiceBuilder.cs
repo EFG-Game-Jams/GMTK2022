@@ -66,10 +66,10 @@ public class CsgDiceBuilder : Spatial
         area.SetMeta(MetaNames.ColliderTag, ColliderTag.DieFace);
 
         // update hole collider
-        CollisionShape shape = GetChild(1).GetChild(0).GetChild(0).GetChild(0) as CollisionShape;
-        CylinderShape cylinder = shape.Shape as CylinderShape;
-        cylinder.Radius = holeRadius;
-        cylinder.Height = holeHeight;
+        //CollisionShape shape = GetChild(1).GetChild(0).GetChild(0).GetChild(0) as CollisionShape;
+        //CylinderShape cylinder = shape.Shape as CylinderShape;
+        //cylinder.Radius = holeRadius;
+        //cylinder.Height = holeHeight;
 
         // update visilibity
         UpdateVariantVisibility();
@@ -107,6 +107,7 @@ public class CsgDiceBuilder : Spatial
 
             Area trigger = child.GetChild(0) as Area;
             trigger.Monitoring = false;
+            trigger.Monitorable = child.Visible;
             trigger.SetMeta(MetaNames.ColliderTag, ColliderTag.Hole);
         }
     }
