@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 [Tool]
 public class CsgDiceBuilder : Spatial
@@ -12,7 +13,15 @@ public class CsgDiceBuilder : Spatial
     [Export] private float holeHeight = 0;
 
     [Export] private int dieVariant = 0;
-    public int DieVariant { get => dieVariant; set => dieVariant = value; }
+    public int DieVariant
+    {
+        get => dieVariant;
+        set
+        {
+            dieVariant = value;
+            UpdateVariantVisibility();
+        }
+    }
 
     public bool IsNeutralized = false;
 
@@ -38,17 +47,11 @@ public class CsgDiceBuilder : Spatial
         {
             ProcessForGame(delta);
         }
-
-        // update visibility based on selected variant
-        for (int i = 1; i < children.Count; ++i)
-        {
-            if (children[i] is Spatial node)
-                node.Visible = (dieVariant < 0 || (i - 1) == dieVariant);
-        }
     }
 
     private void ProcessForEditor()
     {
+        // rebuild
         var children = GetChildren();
         for (int i = 1; i < children.Count; ++i)
         {
@@ -61,11 +64,14 @@ public class CsgDiceBuilder : Spatial
         area.Monitoring = false;
         area.SetMeta(MetaNames.ColliderTag, ColliderTag.DieFace);
 
-        // // update hole collider
+        // update hole collider
         CollisionShape shape = GetChild(1).GetChild(0).GetChild(0).GetChild(0) as CollisionShape;
         CylinderShape cylinder = shape.Shape as CylinderShape;
         cylinder.Radius = holeRadius;
         cylinder.Height = holeHeight;
+
+        // update visilibity
+        UpdateVariantVisibility();
     }
 
     private void ProcessForGame(float delta)
@@ -104,6 +110,16 @@ public class CsgDiceBuilder : Spatial
         }
     }
 
+    private void UpdateVariantVisibility()
+    {
+        var children = GetChildren();
+        for (int i = 0; i < children.Count; ++i)
+        {
+            if (children[i] is CSGBox node)
+                node.Visible = (dieVariant < 0 || (i - 1) == dieVariant);
+        }
+    }
+
     private bool HoleVisible(int die, int hole)
     {
         var dieHoles2D = new byte[7, 7] {
@@ -117,7 +133,7 @@ public class CsgDiceBuilder : Spatial
         };
         // seems godot breaks multidim arrays? what...
         // works fine if we flatten it, so this dirty mess will do
-        /*dieHoles = new byte[7*7];            
+        /*dieHoles = new byte[7*7];
         for (int i=0; i<7; ++i)
             for (int j=0; j<7; ++j)
                 dieHoles[i*7+j] = dieHoles2D[i,j];*/
@@ -156,5 +172,28 @@ public class CsgDiceBuilder : Spatial
                 break;
         }
         return pos;
+    }
+
+    public void GetVisibleHoles(List<Spatial> holes)
+    {
+        if (dieVariant < 0 || dieVariant > 6)
+            return;
+
+        Node activeVariant = GetChild(dieVariant + 1);
+        foreach (var hole in activeVariant.GetChildren())
+            if (hole is Spatial spatial)
+                holes.Add(spatial);
+    }
+
+    public Spatial GetRandomVisibleHole()
+    {
+        List<Spatial> holes = new List<Spatial>();
+        GetVisibleHoles(holes);
+
+        if (holes.Count == 0)
+            return null;
+
+        uint index = GD.Randi() % (uint)holes.Count;
+        return holes[(int)index];
     }
 }
