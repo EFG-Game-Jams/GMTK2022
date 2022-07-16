@@ -32,10 +32,6 @@ public class Player : Spatial
     // TODO Handle mobile user input? Tap to jump, swipe to switch lane?
     public override void _Input(InputEvent inputEvent)
     {
-        if (inputEvent.IsActionPressed("jump"))
-        {
-            Jump();
-        }
         if (inputEvent.IsActionReleased("left"))
         {
             TryMoveLeft();
@@ -188,6 +184,10 @@ public class Player : Spatial
 
             case ColliderTag.Hole:
                 OnHoleCollision(other.GetParent<Spatial>().GetParent<DiceFaceObstacle>());
+                break;
+
+            case ColliderTag.Ramp:
+                Jump();
                 break;
 
             default:

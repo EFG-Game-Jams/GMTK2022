@@ -1,31 +1,17 @@
 using Godot;
 
-public class DiceFaceObstacle : Spatial
+public class Ramp : Spatial
 {
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
     [Export]
     public float Speed = 100;
     [Export]
     public float DespawnZThreshold = 10;
 
-    public bool IsNeutralized = false;
-
-    [Export]
-    public Vector3 SpawnLocation { get; set; } = Vector3.Zero;
-
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        GetFaceArea().SetMeta(MetaNames.ColliderTag, ColliderTag.DieFace);
 
-        var newTransform = Transform;
-        newTransform.origin = SpawnLocation;
-        Transform = newTransform;
     }
-
-    private Area GetFaceArea() => GetNode<Area>("Face/Area");
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
