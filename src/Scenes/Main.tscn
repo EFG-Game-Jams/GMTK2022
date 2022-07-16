@@ -36,7 +36,7 @@ glideSpeed = -5.0
 one_shot = true
 
 [node name="ObstacleSpawnLocation" type="Position3D" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.222, -900 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -900 )
 script = ExtResource( 4 )
 
 [node name="Ground" type="MeshInstance" parent="."]

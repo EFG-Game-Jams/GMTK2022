@@ -7,11 +7,15 @@ public class Main : Spatial
     private float MinimumSpawnTime = 2f;
     [Export]
     private float MaximumSpawnTime = 5f;
+    [Export]
+    private float ObstacleMovementSpeed = 100f;
+    [Export]
+    private float ObstacleDespawnZ = 10f;
 
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
-    private PackedScene obstacleScene = (PackedScene)GD.Load("res://Scenes/DiceFaceObstacle.tscn");
+    private PackedScene obstacleScene = (PackedScene)GD.Load("res://Scenes/ProceduralDice.tscn");
     private PackedScene rampScene = (PackedScene)GD.Load("res://Scenes/Ramp.tscn");
 
     // Called when the node enters the scene tree for the first time.
@@ -30,18 +34,26 @@ public class Main : Spatial
 
     private void SpawnObstacleAndRamp()
     {
-        var obstacle = obstacleScene.Instance<DiceFaceObstacle>();
-        var obstacleSpawnLocation = GetNode<ObstacleSpawnLocation>("ObstacleSpawnLocation");
-        obstacle.SpawnLocation = obstacleSpawnLocation.Transform.origin;
+        var spawnLocation = GetNode<ObstacleSpawnLocation>("ObstacleSpawnLocation");
+
+        var obstacle = obstacleScene.Instance<CsgDiceBuilder>();
+        var obstacleTransform = obstacle.Transform;
+        obstacleTransform.origin = spawnLocation.Transform.origin;
+        obstacle.Transform = obstacleTransform;
+        obstacle.DieVariant = (int)(GD.Randi() % 6) + 1;
+        obstacle.MovementSpeed = ObstacleMovementSpeed;
+        obstacle.DespawnZThreshold = ObstacleDespawnZ;
         AddChild(obstacle);
 
         var ramp = rampScene.Instance<Ramp>();
         var rampTransform = ramp.Transform;
         rampTransform.origin = new Vector3(
-            obstacleSpawnLocation.Transform.origin.x,
+            spawnLocation.Transform.origin.x,
             0,
-            obstacleSpawnLocation.Transform.origin.z + obstacleSpawnLocation.RampLead);
+            spawnLocation.Transform.origin.z + spawnLocation.RampLead);
         ramp.Transform = rampTransform;
+        ramp.MovementSpeed = ObstacleMovementSpeed;
+        ramp.DespawnZThreshold = ObstacleDespawnZ;
         AddChild(ramp);
     }
 

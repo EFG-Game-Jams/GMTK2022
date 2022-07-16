@@ -4,20 +4,25 @@ using System;
 [Tool]
 public class CsgDiceBuilder : Spatial
 {
-    [Export] private float border;    
-    [Export] private float spacing;
-    [Export] private float holeZ;
-    [Export] private float holeRadius;
-    [Export] private int holeSides;
-    [Export] private float holeHeight;
+    [Export] private float border = 0;
+    [Export] private float spacing = 0;
+    [Export] private float holeZ = 0;
+    [Export] private float holeRadius = 0;
+    [Export] private int holeSides = 0;
+    [Export] private float holeHeight = 0;
 
-    [Export] private int dieVariant;
+    [Export] private int dieVariant = 0;
     public int DieVariant { get => dieVariant; set => dieVariant = value; }
+
+    [Export] public float MovementSpeed { get; set; } = 100f;
+    [Export] public float DespawnZThreshold = 10f;
+
+    public bool IsNeutralized = false;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        
+
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -30,18 +35,28 @@ public class CsgDiceBuilder : Spatial
         // rebuild CSG (editor only)
         if (Engine.EditorHint)
         {
-            for (int i=1; i<children.Count; ++i)
-            {
-                if (children[i] is CSGMesh csgMesh)
-                    RebuildDie(csgMesh, i-1);
-            }
+            ProcessForEditor();
+        }
+        else
+        {
+            ProcessForGame(delta);
         }
 
         // update visibility based on selected variant
-        for (int i=1; i<children.Count; ++i)
+        for (int i = 1; i < children.Count; ++i)
         {
             if (children[i] is Spatial node)
-                node.Visible = (dieVariant < 0 || (i-1) == dieVariant);
+                node.Visible = (dieVariant < 0 || (i - 1) == dieVariant);
+        }
+    }
+
+    private void ProcessForEditor()
+    {
+        var children = GetChildren();
+        for (int i = 1; i < children.Count; ++i)
+        {
+            if (children[i] is CSGMesh csgMesh)
+                RebuildDie(csgMesh, i - 1);
         }
 
         // update die collider
@@ -49,22 +64,33 @@ public class CsgDiceBuilder : Spatial
         area.Monitoring = false;
         area.SetMeta(MetaNames.ColliderTag, ColliderTag.DieFace);
 
-        // update hole collider
+        // // update hole collider
         CollisionShape shape = GetChild(1).GetChild(0).GetChild(0).GetChild(0) as CollisionShape;
-        CylinderShape cylinder = shape.Shape as CylinderShape;        
+        CylinderShape cylinder = shape.Shape as CylinderShape;
         cylinder.Radius = holeRadius;
         cylinder.Height = holeHeight;
+    }
+
+    private void ProcessForGame(float delta)
+    {
+        // Update movement
+        Displace(MovementSpeed * delta);
+
+        if (Transform.origin.z > DespawnZThreshold)
+        {
+            QueueFree();
+        }
     }
 
     private void RebuildDie(Node root, int die)
     {
         if (root.GetChildCount() != 7)
             return;
-        
-        for (int i=0; i<root.GetChildCount(); ++i)
-        {            
+
+        for (int i = 0; i < root.GetChildCount(); ++i)
+        {
             CSGCylinder child = root.GetChild(i) as CSGCylinder;
-            
+
             child.Visible = HoleVisible(die, i);
 
             Vector3 pos = GetHolePosition(i);
@@ -78,10 +104,10 @@ public class CsgDiceBuilder : Spatial
 
             if (holeRadius != child.Radius)
                 child.Radius = holeRadius;
-            
+
             if (holeSides != child.Sides)
                 child.Sides = holeSides;
-            
+
             Area trigger = child.GetChild(0) as Area;
             trigger.Monitoring = false;
             trigger.SetMeta(MetaNames.ColliderTag, ColliderTag.Hole);
@@ -140,5 +166,15 @@ public class CsgDiceBuilder : Spatial
                 break;
         }
         return pos;
+    }
+
+    private void Displace(float z)
+    {
+        var newTransform = Transform;
+        newTransform.origin = new Vector3(
+            Transform.origin.x,
+            Transform.origin.y,
+            Transform.origin.z + z);
+        Transform = newTransform;
     }
 }

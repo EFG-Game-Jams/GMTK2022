@@ -3,7 +3,7 @@ using Godot;
 public class Ramp : Spatial
 {
     [Export]
-    public float Speed = 100;
+    public float MovementSpeed = 100;
     [Export]
     public float DespawnZThreshold = 10;
 
@@ -16,7 +16,7 @@ public class Ramp : Spatial
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
-        Displace(Speed * delta);
+        Displace(MovementSpeed * delta);
 
         if (Transform.origin.z > DespawnZThreshold)
         {

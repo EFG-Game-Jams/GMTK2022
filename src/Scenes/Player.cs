@@ -176,14 +176,14 @@ public class Player : Spatial
         switch (tag)
         {
             case ColliderTag.DieFace:
-                if (!other.GetParent().GetParent<DiceFaceObstacle>().IsNeutralized)
+                if (!other.GetParent<CsgDiceBuilder>().IsNeutralized)
                 {
                     OnPlayerDeath();
                 }
                 break;
 
             case ColliderTag.Hole:
-                OnHoleCollision(other.GetParent<Spatial>().GetParent<DiceFaceObstacle>());
+                OnHoleCollision(other.GetParent().GetParent().GetParent<CsgDiceBuilder>());
                 break;
 
             case ColliderTag.Ramp:
@@ -202,7 +202,7 @@ public class Player : Spatial
         GD.Print("PLAYER DIED", Engine.GetPhysicsFrames()); // DEBUG
     }
 
-    private void OnHoleCollision(DiceFaceObstacle obstacle)
+    private void OnHoleCollision(CsgDiceBuilder obstacle)
     {
         obstacle.IsNeutralized = true;
     }
