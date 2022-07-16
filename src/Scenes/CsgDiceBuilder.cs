@@ -107,7 +107,7 @@ public class CsgDiceBuilder : Spatial
 
             Area trigger = child.GetChild(0) as Area;
             trigger.Monitoring = false;
-            trigger.Monitorable = child.Visible;
+            trigger.Monitorable = true;
             trigger.SetMeta(MetaNames.ColliderTag, ColliderTag.Hole);
         }
     }
@@ -118,7 +118,25 @@ public class CsgDiceBuilder : Spatial
         for (int i = 0; i < children.Count; ++i)
         {
             if (children[i] is CSGMesh node)
+            {
                 node.Visible = (dieVariant < 0 || (i - 1) == dieVariant);
+                UpdateCollisionShapesEnabled(node, !node.Visible);
+            }
+        }
+    }
+
+    private void UpdateCollisionShapesEnabled(CSGMesh die, bool forceDisabled)
+    {
+        for (int i = 0; i < die.GetChildCount(); ++i)
+        {
+            Node child = die.GetChild(i);
+            if (child is CSGCylinder node)
+            {
+                bool disable = forceDisabled || !node.Visible;
+                CollisionShape shape = node.GetChild(0).GetChild<CollisionShape>(0);
+                shape.Disabled = disable;
+                //trigger.Monitorable = child.Visible;
+            }
         }
     }
 
