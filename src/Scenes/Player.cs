@@ -3,8 +3,10 @@ using System;
 
 public class Player : Spatial
 {
+    private bool isAlive = true;
     private bool isFlying = false;
     private bool isGliding = false;
+    private bool isGlidingAllowed = true;
     private Lane currentLane = Lane.Middle;
 
     [Export]
@@ -23,6 +25,9 @@ public class Player : Spatial
     private float currentJumpVelocity = 0;
 
     private Transform originalTransform;
+
+    [Signal]
+    public delegate void PlayerDied();
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -49,6 +54,17 @@ public class Player : Spatial
             currentJumpVelocity = 0f;
             Transform = originalTransform;
         }
+    }
+
+    public void Reset()
+    {
+        isAlive = true;
+        isFlying = false;
+        isGliding = false;
+        isGlidingAllowed = true;
+        currentJumpVelocity = 0f;
+        currentLane = Lane.Middle;
+        Transform = originalTransform;
     }
 
     private void Jump()
@@ -112,17 +128,16 @@ public class Player : Spatial
         currentLane = lane;
     }
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(float delta)
+    public override void _PhysicsProcess(float delta)
     {
-        if (Transform.origin.y < radius)
+        if (Transform.origin.y < 0)
         {
-            OnGroundCollision();
+            OnPlayerDeath();
         }
 
         if (isFlying)
         {
-            if (Input.IsActionPressed("glide") && currentJumpVelocity <= glideSpeed)
+            if (Input.IsActionPressed("glide") && currentJumpVelocity <= glideSpeed && isGlidingAllowed)
             {
                 isGliding = true;
                 Displace(glideSpeed * delta);
@@ -147,19 +162,6 @@ public class Player : Spatial
         Transform = newTransform;
     }
 
-    private void OnGroundCollision()
-    {
-        isFlying = false;
-
-        var newTransform = Transform;
-        newTransform.origin = new Vector3(
-            Transform.origin.x,
-            originalTransform.origin.y,
-            originalTransform.origin.z);
-        Transform = newTransform;
-        // TODO
-    }
-
     private void Displace(float y)
     {
         var newTransform = Transform;
@@ -170,11 +172,6 @@ public class Player : Spatial
         Transform = newTransform;
     }
 
-    public override void _PhysicsProcess(float delta)
-    {
-        base._PhysicsProcess(delta);
-    }
-
     public void OnCollisionEntered(Area other)
     {
         var tag = (ColliderTag)other.GetMeta(MetaNames.ColliderTag);
@@ -183,16 +180,30 @@ public class Player : Spatial
             case ColliderTag.DieFace:
                 if (!other.GetParent<CsgDiceBuilder>().IsNeutralized)
                 {
+                    this.SetOrigin(Transform.origin.x, Transform.origin.y, other.GlobalTransform.origin.z + radius + radius);
                     OnPlayerDeath();
                 }
                 break;
 
             case ColliderTag.Hole:
-                OnHoleCollision(other.GetParent().GetParent().GetParent<CsgDiceBuilder>());
+                {
+                    isGlidingAllowed = false;
+                    var parent = other.GetParent().GetParent().GetParent<CsgDiceBuilder>();
+                    if (!parent.IsNeutralized)
+                    {
+                        var yError = other.GlobalTransform.origin.y - Transform.origin.y;
+                        currentJumpVelocity = yError * 4;
+                        OnHoleCollision(parent);
+                    }
+                }
                 break;
 
             case ColliderTag.Ramp:
                 Jump();
+                break;
+
+            case ColliderTag.Ground:
+                OnGroundCollision();
                 break;
 
             default:
@@ -201,10 +212,28 @@ public class Player : Spatial
         }
     }
 
+    private void OnGroundCollision()
+    {
+        isFlying = false;
+        isGlidingAllowed = true;
+
+        var newTransform = Transform;
+        newTransform.origin = new Vector3(
+            Transform.origin.x,
+            originalTransform.origin.y,
+            originalTransform.origin.z);
+        Transform = newTransform;
+    }
+
     private void OnPlayerDeath()
     {
-        //Reset(); // TODO
-        GD.Print("PLAYER DIED", Engine.GetPhysicsFrames()); // DEBUG
+        if (!isAlive)
+        {
+            return;
+        }
+
+        isAlive = false;
+        EmitSignal(nameof(PlayerDied));
     }
 
     private void OnHoleCollision(CsgDiceBuilder obstacle)

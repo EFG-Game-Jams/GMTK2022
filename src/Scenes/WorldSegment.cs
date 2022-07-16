@@ -25,13 +25,13 @@ public class WorldSegment : Spatial
         obstacle.DieVariant = (int)(GD.Randi() % 6) + 1;
 
         var groundScale = LeadDistance / 2f;
-        var ground = GetNode<MeshInstance>("Ground");
+        var ground = GetNode<Spatial>("Ground");
         ground.SetOrigin(0, -1, -groundScale);
         ground.Scale = new Vector3(6, 1, groundScale);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(float delta)
+    public override void _PhysicsProcess(float delta)
     {
         this.MoveOrigin(0, 0, MovementSpeed * delta);
     }

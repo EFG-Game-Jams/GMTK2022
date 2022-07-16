@@ -2,5 +2,6 @@ public enum ColliderTag
 {
     Hole,
     DieFace,
-    Ramp
+    Ramp,
+    Ground,
 }

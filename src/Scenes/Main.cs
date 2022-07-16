@@ -9,8 +9,9 @@ public class Main : Spatial
     [Export] private float MinimumGapDistance = 10f;
     [Export] private float MaximumGapDistance = 20f;
     [Export] private float MinimumSegmentsLength = 800f;
-    private float movementSpeed = 80f;
-    [Export]
+    [Export] private float MinimumMovementSpeed = 80f;
+
+    private float movementSpeed = 0f;
     private float MovementSpeed
     {
         get => movementSpeed;
@@ -24,23 +25,33 @@ public class Main : Spatial
         }
     }
 
+    private bool playerAlive = true;
+
     private PackedScene worldSegmentScene = (PackedScene)GD.Load("res://Scenes/WorldSegment.tscn");
     private List<WorldSegment> segments = new List<WorldSegment>();
+    private Timer playerRespawnTimer;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         GD.Randomize();
-        AddSegment();
+        playerRespawnTimer = GetNode<Timer>("PlayerDeathTimer");
+
+        movementSpeed = MinimumMovementSpeed;
+        EnsureSegmentsExist();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(float delta)
+    public override void _PhysicsProcess(float delta)
     {
         CleanupOldSegments();
         EnsureSegmentsExist();
 
         // TODO increment movement speed over time?
+        if (!playerAlive)
+        {
+            MovementSpeed = movementSpeed * 0.6f;
+        }
     }
 
     private void CleanupOldSegments()
@@ -78,5 +89,16 @@ public class Main : Spatial
 
         segments.Add(segment);
         AddChild(segment);
+    }
+
+    public void OnPlayerDied()
+    {
+        MovementSpeed = 0f;
+        playerRespawnTimer.Start(2f);
+    }
+
+    public void OnPlayerRespawn()
+    {
+        GetTree().ReloadCurrentScene();
     }
 }

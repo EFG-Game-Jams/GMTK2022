@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Conflicted.mp3-652af7414c70c72ecbf972fb4f6d810c.mp3str"
+
+[deps]
+
+source_file="res://Assets/Conflicted.mp3"
+dest_files=[ "res://.import/Conflicted.mp3-652af7414c70c72ecbf972fb4f6d810c.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

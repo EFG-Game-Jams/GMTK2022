@@ -1,22 +1,36 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Materials/ground.tres" type="Material" id=1]
 [ext_resource path="res://Scenes/WorldSegment.cs" type="Script" id=2]
 [ext_resource path="res://Scenes/ProceduralDice.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/Ramp.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/Ground.cs" type="Script" id=5]
 
 [sub_resource type="CubeMesh" id=1]
+
+[sub_resource type="BoxShape" id=2]
 
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 2 )
 
-[node name="Ground" type="MeshInstance" parent="."]
+[node name="Obstacle" parent="." instance=ExtResource( 3 )]
+holeRadius = 0.12
+
+[node name="Ramp" parent="." instance=ExtResource( 4 )]
+
+[node name="Ground" type="Spatial" parent="."]
+script = ExtResource( 5 )
+
+[node name="Mesh" type="MeshInstance" parent="Ground"]
 layers = 2
 cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = ExtResource( 1 )
 
-[node name="Obstacle" parent="." instance=ExtResource( 3 )]
+[node name="Area" type="Area" parent="Ground"]
+input_ray_pickable = false
+monitoring = false
 
-[node name="Ramp" parent="." instance=ExtResource( 4 )]
+[node name="CollisionShape" type="CollisionShape" parent="Ground/Area"]
+shape = SubResource( 2 )

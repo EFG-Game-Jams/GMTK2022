@@ -11,6 +11,7 @@ extents = Vector3( 0.5, 0.5, 0.05 )
 [node name="CsgDice" type="Spatial"]
 transform = Transform( 12, 0, 0, 0, 12, 0, 0, 0, 12, 0, 0, 0 )
 script = ExtResource( 2 )
+DieVariant = 1
 border = 0.25
 spacing = 0.25
 holeRadius = 0.1
@@ -29,6 +30,7 @@ shape = SubResource( 1 )
 
 [node name="Die0" type="CSGMesh" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, 0 )
+visible = false
 layers = 2
 mesh = ExtResource( 3 )
 material = ExtResource( 4 )
@@ -48,6 +50,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die0/Hole1/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole2" type="CSGCylinder" parent="Die0"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.25, 0.5, 0 )
@@ -64,6 +67,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die0/Hole2/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole3" type="CSGCylinder" parent="Die0"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.25, 0.75, 0 )
@@ -80,6 +84,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die0/Hole3/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole4" type="CSGCylinder" parent="Die0"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.5, 0.5, 0 )
@@ -96,6 +101,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die0/Hole4/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole5" type="CSGCylinder" parent="Die0"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.25, 0 )
@@ -112,6 +118,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die0/Hole5/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole6" type="CSGCylinder" parent="Die0"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.5, 0 )
@@ -128,6 +135,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die0/Hole6/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole7" type="CSGCylinder" parent="Die0"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.75, 0 )
@@ -144,10 +152,10 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die0/Hole7/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Die1" type="CSGMesh" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, 0 )
-visible = false
 layers = 2
 mesh = ExtResource( 3 )
 material = ExtResource( 4 )
@@ -167,6 +175,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die1/Hole1/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole2" type="CSGCylinder" parent="Die1"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.25, 0.5, 0 )
@@ -183,6 +192,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die1/Hole2/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole3" type="CSGCylinder" parent="Die1"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.25, 0.75, 0 )
@@ -199,6 +209,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die1/Hole3/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole4" type="CSGCylinder" parent="Die1"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.5, 0.5, 0 )
@@ -230,6 +241,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die1/Hole5/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole6" type="CSGCylinder" parent="Die1"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.5, 0 )
@@ -246,6 +258,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die1/Hole6/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole7" type="CSGCylinder" parent="Die1"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.75, 0 )
@@ -262,6 +275,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die1/Hole7/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Die2" type="CSGMesh" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, 0 )
@@ -284,6 +298,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die2/Hole1/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole2" type="CSGCylinder" parent="Die2"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.25, 0.5, 0 )
@@ -300,6 +315,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die2/Hole2/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole3" type="CSGCylinder" parent="Die2"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.25, 0.75, 0 )
@@ -316,6 +332,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die2/Hole3/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole4" type="CSGCylinder" parent="Die2"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.5, 0.5, 0 )
@@ -332,6 +349,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die2/Hole4/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole5" type="CSGCylinder" parent="Die2"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.25, 0 )
@@ -348,6 +366,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die2/Hole5/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole6" type="CSGCylinder" parent="Die2"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.5, 0 )
@@ -364,6 +383,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die2/Hole6/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole7" type="CSGCylinder" parent="Die2"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.75, 0 )
@@ -379,6 +399,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die2/Hole7/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Die3" type="CSGMesh" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, 0 )
@@ -402,6 +423,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die3/Hole1/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole2" type="CSGCylinder" parent="Die3"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.25, 0.5, 0 )
@@ -418,6 +440,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die3/Hole2/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole3" type="CSGCylinder" parent="Die3"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.25, 0.75, 0 )
@@ -433,6 +456,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die3/Hole3/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole4" type="CSGCylinder" parent="Die3"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.5, 0.5, 0 )
@@ -448,6 +472,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die3/Hole4/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole5" type="CSGCylinder" parent="Die3"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.25, 0 )
@@ -463,6 +488,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die3/Hole5/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole6" type="CSGCylinder" parent="Die3"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.5, 0 )
@@ -479,6 +505,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die3/Hole6/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole7" type="CSGCylinder" parent="Die3"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.75, 0 )
@@ -495,6 +522,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die3/Hole7/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Die4" type="CSGMesh" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, 0 )
@@ -517,6 +545,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die4/Hole1/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole2" type="CSGCylinder" parent="Die4"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.25, 0.5, 0 )
@@ -533,6 +562,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die4/Hole2/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole3" type="CSGCylinder" parent="Die4"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.25, 0.75, 0 )
@@ -548,6 +578,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die4/Hole3/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole4" type="CSGCylinder" parent="Die4"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.5, 0.5, 0 )
@@ -564,6 +595,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die4/Hole4/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole5" type="CSGCylinder" parent="Die4"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.25, 0 )
@@ -579,6 +611,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die4/Hole5/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole6" type="CSGCylinder" parent="Die4"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.5, 0 )
@@ -595,6 +628,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die4/Hole6/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole7" type="CSGCylinder" parent="Die4"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.75, 0 )
@@ -610,6 +644,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die4/Hole7/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Die5" type="CSGMesh" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, 0 )
@@ -632,6 +667,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die5/Hole1/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole2" type="CSGCylinder" parent="Die5"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.25, 0.5, 0 )
@@ -648,6 +684,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die5/Hole2/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole3" type="CSGCylinder" parent="Die5"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.25, 0.75, 0 )
@@ -663,6 +700,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die5/Hole3/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole4" type="CSGCylinder" parent="Die5"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.5, 0.5, 0 )
@@ -678,6 +716,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die5/Hole4/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole5" type="CSGCylinder" parent="Die5"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.25, 0 )
@@ -693,6 +732,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die5/Hole5/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole6" type="CSGCylinder" parent="Die5"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.5, 0 )
@@ -709,6 +749,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die5/Hole6/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole7" type="CSGCylinder" parent="Die5"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.75, 0 )
@@ -724,6 +765,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die5/Hole7/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Die6" type="CSGMesh" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, 0 )
@@ -746,6 +788,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die6/Hole1/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole2" type="CSGCylinder" parent="Die6"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.25, 0.5, 0 )
@@ -761,6 +804,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die6/Hole2/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole3" type="CSGCylinder" parent="Die6"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.25, 0.75, 0 )
@@ -776,6 +820,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die6/Hole3/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole4" type="CSGCylinder" parent="Die6"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.5, 0.5, 0 )
@@ -792,6 +837,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die6/Hole4/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole5" type="CSGCylinder" parent="Die6"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.25, 0 )
@@ -807,6 +853,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die6/Hole5/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole6" type="CSGCylinder" parent="Die6"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.5, 0 )
@@ -822,6 +869,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die6/Hole6/Area"]
 shape = ExtResource( 1 )
+disabled = true
 
 [node name="Hole7" type="CSGCylinder" parent="Die6"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 0.234434, -1.02474e-08, 0.75, 0.75, 0 )
@@ -837,3 +885,4 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Die6/Hole7/Area"]
 shape = ExtResource( 1 )
+disabled = true

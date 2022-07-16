@@ -16,8 +16,8 @@ dof_blur_far_distance = 282.13
 
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 1 )
-MinimumGapDistance = 140.0
-MaximumGapDistance = 200.0
+MinimumGapDistance = 80.0
+MaximumGapDistance = 250.0
 
 [node name="ClippedCamera" type="ClippedCamera" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.41307, 16.8219 )
@@ -28,19 +28,27 @@ far = 1000.0
 [node name="Player" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
 jumpSpeed = 35.0
-glideSpeed = -5.0
+jumpDecay = 55.0
+glideSpeed = -2.0
 laneSwitchingSpeed = 10.0
 
 [node name="PlayerLight" type="OmniLight" parent="Player"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.508024, 4.38895 )
 omni_range = 17.906
 
-[node name="DirectionalLight" type="DirectionalLight" parent="Player"]
-transform = Transform( 1, 0, 0, 0, 0.0156724, 0.999877, 0, -0.999877, 0.0156724, 0, 11.7732, 0.13348 )
-shadow_enabled = true
-
 [node name="ObstacleLight" type="DirectionalLight" parent="."]
 transform = Transform( 0.999104, -0.0117671, 0.0406649, -0.00972292, 0.871127, 0.490961, -0.0412015, -0.490916, 0.870232, 0, 8.63785, 13.5983 )
 layers = 2
 light_cull_mask = 4294967294
 shadow_enabled = true
+
+[node name="PlayerLight" type="DirectionalLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.0156724, 0.999877, 0, -0.999877, 0.0156724, 0, 12.7732, 0.13348 )
+shadow_enabled = true
+
+[node name="PlayerDeathTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="PlayerDied" from="Player" to="." method="OnPlayerDied"]
+[connection signal="timeout" from="PlayerDeathTimer" to="." method="OnPlayerRespawn"]
