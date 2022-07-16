@@ -14,6 +14,7 @@ script = ExtResource( 3 )
 
 [node name="Mesh" type="MeshInstance" parent="Face"]
 transform = Transform( 12, 0, 0, 0, 12, 0, 0, 0, 12, -6, -6, 0 )
+layers = 3
 mesh = ExtResource( 1 )
 skeleton = NodePath("../..")
 material/0 = null
