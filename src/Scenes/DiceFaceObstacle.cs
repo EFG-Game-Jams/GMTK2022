@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 using System.Linq;
 
 public class DiceFaceObstacle : Spatial
@@ -11,16 +12,17 @@ public class DiceFaceObstacle : Spatial
     [Export]
     public float DespawnZThreshold = 10;
 
+    public bool IsNeutralized = false;
+
     [Export]
     public Vector3 SpawnLocation { get; set; } = Vector3.Zero;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        var faceArea = GetNode("Face/Area");
-        faceArea.SetMeta(MetaNames.ColliderTag, ColliderTag.DieFace);
+        GetFaceArea().SetMeta(MetaNames.ColliderTag, ColliderTag.DieFace);
 
-        foreach (var node in GetChildren().Cast<Node>().Where(c => c.Name.StartsWith("BlackBall")))
+        foreach (var node in GetHoles())
         {
             node.GetNode("Area").SetMeta(MetaNames.ColliderTag, ColliderTag.Hole);
         }
@@ -29,6 +31,13 @@ public class DiceFaceObstacle : Spatial
         newTransform.origin = SpawnLocation;
         Transform = newTransform;
     }
+
+    private Area GetFaceArea() => GetNode<Area>("Face/Area");
+
+    private IEnumerable<DiceFaceObstacleBall> GetHoles() => GetChildren()
+        .Cast<Node>()
+        .Where(c => c.Name.StartsWith("BlackBall"))
+        .Cast<DiceFaceObstacleBall>();
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)

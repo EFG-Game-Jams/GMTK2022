@@ -177,7 +177,34 @@ public class Player : Spatial
     public void OnCollisionEntered(Area other)
     {
         var tag = (ColliderTag)other.GetMeta(MetaNames.ColliderTag);
-        GD.Print(tag);
+        switch (tag)
+        {
+            case ColliderTag.DieFace:
+                if (!other.GetParent().GetParent<DiceFaceObstacle>().IsNeutralized)
+                {
+                    OnPlayerDeath();
+                }
+                break;
+
+            case ColliderTag.Hole:
+                OnHoleCollision(other.GetParent<Spatial>().GetParent<DiceFaceObstacle>());
+                break;
+
+            default:
+                GD.PrintErr($"Unexpected {nameof(ColliderTag)} value {tag}");
+                break;
+        }
+    }
+
+    private void OnPlayerDeath()
+    {
+        //Reset(); // TODO
+        GD.Print("PLAYER DIED", Engine.GetPhysicsFrames()); // DEBUG
+    }
+
+    private void OnHoleCollision(DiceFaceObstacle obstacle)
+    {
+        obstacle.IsNeutralized = true;
     }
 
     enum Lane
