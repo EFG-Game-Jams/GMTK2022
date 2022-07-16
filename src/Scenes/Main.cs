@@ -48,7 +48,11 @@ public class Main : Spatial
         EnsureSegmentsExist();
 
         // TODO increment movement speed over time?
-        if (!playerAlive)
+        if (playerAlive)
+        {
+            GetNode<HUD>("HUD").Distance += MovementSpeed * delta;
+        }
+        else
         {
             MovementSpeed = movementSpeed * 0.6f;
         }
