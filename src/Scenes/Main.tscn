@@ -20,6 +20,7 @@ dof_blur_far_distance = 282.13
 
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 1 )
+ObstacleDespawnZ = 50.0
 
 [node name="ClippedCamera" type="ClippedCamera" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.41307, 16.8219 )
