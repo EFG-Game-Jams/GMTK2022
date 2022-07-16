@@ -12,7 +12,8 @@ public class CsgDiceBuilder : Spatial
     [Export] private int holeSides = 0;
     [Export] private float holeHeight = 0;
 
-    [Export] private int dieVariant = 0;
+    private int dieVariant = 0;
+    [Export]
     public int DieVariant
     {
         get => dieVariant;
@@ -115,7 +116,7 @@ public class CsgDiceBuilder : Spatial
         var children = GetChildren();
         for (int i = 0; i < children.Count; ++i)
         {
-            if (children[i] is CSGBox node)
+            if (children[i] is CSGMesh node)
                 node.Visible = (dieVariant < 0 || (i - 1) == dieVariant);
         }
     }
