@@ -5,7 +5,7 @@ public class Player : Spatial
 {
     private bool isFlying = false;
     private bool isGliding = false;
-    private Lane lane = Lane.Middle;
+    private Lane currentLane = Lane.Middle;
 
     [Export]
     private float jumpSpeed = 100;
@@ -13,6 +13,11 @@ public class Player : Spatial
     private float jumpDecay = 50;
     [Export]
     private float glideSpeed = -15;
+    [Export]
+    private float laneXOffset = 3.2f;
+    [Export]
+    private float radius = 1f;
+
     private float currentJumpVelocity = 0;
 
     private Transform originalTransform;
@@ -21,6 +26,7 @@ public class Player : Spatial
     public override void _Ready()
     {
         originalTransform = Transform;
+        Scale = new Vector3(radius, radius, radius);
     }
 
     // TODO Handle mobile user input? Tap to jump, swipe to switch lane?
@@ -30,11 +36,11 @@ public class Player : Spatial
         {
             Jump();
         }
-        if (inputEvent.IsActionPressed("left"))
+        if (inputEvent.IsActionReleased("left"))
         {
             TryMoveLeft();
         }
-        if (inputEvent.IsActionPressed("right"))
+        if (inputEvent.IsActionReleased("right"))
         {
             TryMoveRight();
         }
@@ -65,14 +71,14 @@ public class Player : Spatial
             return;
         }
 
-        switch (lane)
+        switch (currentLane)
         {
             case Lane.Middle:
-                lane = Lane.Left;
+                SwitchToLane(Lane.Left);
                 break;
 
             case Lane.Right:
-                lane = Lane.Middle;
+                SwitchToLane(Lane.Middle);
                 break;
         }
     }
@@ -84,14 +90,14 @@ public class Player : Spatial
             return;
         }
 
-        switch (lane)
+        switch (currentLane)
         {
             case Lane.Left:
-                lane = Lane.Middle;
+                SwitchToLane(Lane.Middle);
                 break;
 
             case Lane.Middle:
-                lane = Lane.Right;
+                SwitchToLane(Lane.Right);
                 break;
         }
     }
@@ -100,31 +106,57 @@ public class Player : Spatial
     // disallowes lane switching)
     private bool CanSwitchLane()
     {
-        return true;
+        return !isFlying;
     }
 
-    public void OnGroundCollision(Area ground)
+    private void SwitchToLane(Lane lane)
     {
-        isFlying = false;
-        Transform = originalTransform;
-        // TODO
+        float x = lane == Lane.Left ? -laneXOffset : (lane == Lane.Right ? laneXOffset : 0f);
+        var newTransform = Transform;
+        newTransform.origin = new Vector3(
+            originalTransform.origin.x + x,
+            Transform.origin.y,
+            Transform.origin.z);
+        Transform = newTransform;
+
+        currentLane = lane;
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
+        if (Transform.origin.y < radius)
+        {
+            OnGroundCollision();
+        }
+
         if (isFlying)
         {
             if (Input.IsActionPressed("glide") && currentJumpVelocity <= glideSpeed)
             {
+                isGliding = true;
                 Displace(glideSpeed * delta);
             }
             else
             {
+                isGliding = false;
                 currentJumpVelocity -= jumpDecay * delta;
                 Displace(delta * currentJumpVelocity);
             }
         }
+    }
+
+    private void OnGroundCollision()
+    {
+        isFlying = false;
+
+        var newTransform = Transform;
+        newTransform.origin = new Vector3(
+            Transform.origin.x,
+            originalTransform.origin.y,
+            originalTransform.origin.z);
+        Transform = newTransform;
+        // TODO
     }
 
     private void Displace(float y)
